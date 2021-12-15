@@ -3,54 +3,36 @@ import java.util.ArrayList;
 
 public class PermutationList{
     private ArrayList<Integer> numList = new ArrayList<Integer>();
-    private int upper;
-    private int lower;
 
     public PermutationList(){
-        lower = 1;
-        upper = 10;
-        fillNumList();
+        fillNumList(1, 10);
     }
     //Precondition: numberOfEntries >= 1
     public PermutationList(int numberOfEntries){
-        lower = 1;
-        upper = numberOfEntries;
-        fillNumList();
+        fillNumList(1, numberOfEntries);
     }
-    //Precondition: upperBound >= lowerBound
-    public PermutationList(int lowerBound, int upperBound){
-        lower = lowerBound;
-        upper = upperBound;
-        fillNumList();
+    //Precondition: upper >= lower
+    public PermutationList(int lower, int upper){
+        fillNumList(lower, upper);
     }
     public PermutationList(int[] numberList){
-        //since these numbers may not be in order, lower and upper are placeholders so loops work
-        lower = 0;
-        upper = numberList.length - 1;
         for(int i = 0; i < numberList.length; i++){
             numList.add(numberList[i]);
         }
     }
 
-    private void fillNumList(){
-        for(int i = lower; i <= upper; i++){
-            numList.add(i);
-        }
-    }
-
-    public ArrayList<Integer> randomPermutation(){
+    public ArrayList<Integer> nextPermutation(){
         ArrayList<Integer> returnList = new ArrayList<Integer>();
         ArrayList<Integer> cloneList = new ArrayList<Integer>();
         for(int i = 0; i < numList.size(); i++){
             cloneList.add(numList.get(i));
         }
-        for(int i = lower; i <= upper; i++){
+        for(int i = cloneList.size() - 1; i >= 0; i--){
             returnList.add(cloneList.remove((int)Math.floor(Math.random() * cloneList.size())));
         }
         return returnList;
     }
     
-    //not done
     public int totalPermutations(){
         int numP = 1;
         ArrayList<Integer> unique = uniqueList();
@@ -68,7 +50,33 @@ public class PermutationList{
         return numP;
     }
 
-    //not done
+    public int totalCombinations(){
+
+    }
+
+    //for solving permutations in the form nPr
+    //precondition n >= r
+    public static int numPermutations(int n, int r){
+        int numPerms = 1;
+        for(int i = n - r + 1; i <= n; i++){
+            numPerms *= i;
+        }
+        return numPerms;
+    }
+
+    //for solving permutations in the form nCr
+    //precondition n >= r
+    public static int numCombinations(int n, int r){
+
+    }
+
+    private void fillNumList(int lower, int upper){
+        for(int i = lower; i <= upper; i++){
+            numList.add(i);
+        }
+    }
+
+    //gets list of all unique entries within a permutation list
     private ArrayList<Integer> uniqueList(){
         ArrayList<Integer> uniqueList = new ArrayList<Integer>();
         for(int i = 0; i < numList.size(); i++){
@@ -86,6 +94,7 @@ public class PermutationList{
         return occurrences;
     }
 
+    //since java.util.Math does not include a factorial method
     private static int factorial(int num){
         if(num == 0) return 1;
         if(num == 1) return num;

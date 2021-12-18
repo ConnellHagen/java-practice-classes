@@ -50,9 +50,9 @@ public class PermutationList{
         return numP;
     }
 
-    public int totalCombinations(){
+    /*public int totalCombinations(){
 
-    }
+    }*/
 
     //for solving permutations in the form nPr
     //precondition n >= r
@@ -66,9 +66,9 @@ public class PermutationList{
 
     //for solving permutations in the form nCr
     //precondition n >= r
-    public static int numCombinations(int n, int r){
+    /*public static int numCombinations(int n, int r){
 
-    }
+    }*/
 
     private void fillNumList(int lower, int upper){
         for(int i = lower; i <= upper; i++){

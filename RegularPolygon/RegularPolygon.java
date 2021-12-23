@@ -8,7 +8,7 @@ public class RegularPolygon{
     
     public RegularPolygon(){
         myNumSides = 3;
-        mySideLength = 1; //not sure if this is right, i dont think that it says what the default val should be here
+        mySideLength = 1;
         calcR();
         calcr();
     }
@@ -24,7 +24,7 @@ public class RegularPolygon{
     }
 
     private void calcR(){
-        myR = myr / Math.sin(Math.toRadians(vertexAngle() / 2.0));
+        myR = (mySideLength / 2.0) / Math.cos(Math.toRadians(vertexAngle() / 2.0));
     }
 
     public double vertexAngle(){
@@ -37,7 +37,7 @@ public class RegularPolygon{
 
     //breaks the polygon into a bunch of congruent triangles
     public double area(){
-        return (myNumSides - 2) * (mySideLength * myr / 2);
+        return (myNumSides) * (mySideLength * myr / 2);
     }
 
     public double getNumSide(){
@@ -58,6 +58,6 @@ public class RegularPolygon{
 
     @Override
     public String toString(){
-        return myNumSides + " sides, " + mySideLength + " long, r = " + myr +", R = " + myR;
+        return myNumSides + " sides, " + mySideLength + " sidelength, r = " + myr +", R = " + myR + ", area = " + area() + ", perimeter = " + perimeter();
     }
 }

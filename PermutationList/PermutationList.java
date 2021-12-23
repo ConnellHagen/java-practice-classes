@@ -50,8 +50,14 @@ public class PermutationList{
         return numP;
     }
 
-    /*public int totalCombinations(){
-
+    //this is crazy complicated and i cannot find explanations of how to do this online when there are duplicated in the list
+    /*public int totalCombinations(int chooseNum){
+        int numC = totalPermutations() / PermutationList.factorial(numList.size());
+        ArrayList<Integer> unique = uniqueList();
+        for(int i = 0; i < unique.size(); i++){
+            numC /= numOccurrences(unique.get(i));
+        }
+        return numC;
     }*/
 
     //for solving permutations in the form nPr
@@ -66,9 +72,9 @@ public class PermutationList{
 
     //for solving permutations in the form nCr
     //precondition n >= r
-    /*public static int numCombinations(int n, int r){
-
-    }*/
+    public static int numCombinations(int n, int r){
+        return PermutationList.numPermutations(n, r) / PermutationList.factorial(r);
+    }
 
     private void fillNumList(int lower, int upper){
         for(int i = lower; i <= upper; i++){

@@ -17,7 +17,7 @@ public class Social{
 
 	public int getSum(){
 		Scanner sumScan = new Scanner(socialNum);
-		sumScan.useDelimiter("-");
+		sumScan.useDelimiter("\\D");
 		int sum = 0;
 		while(sumScan.hasNextInt()){
 			sum += sumScan.nextInt();

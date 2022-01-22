@@ -146,17 +146,21 @@ public class StringParser {
 
         int senCount = 0;
 
-        for(int i = 0; i < temp.size(); i++){
-            Scanner sentenceScanner = new Scanner(temp.get(i));
-            sentenceScanner.useDelimiter("[\\.!?]");
-
-            while(sentenceScanner.hasNext()){
-                senCount++;
-                sentenceScanner.next();
-            }
-
-            sentenceScanner.close();
+        String combined = "";
+        for(String line : temp){
+            combined += line;
         }
+
+        Scanner sentenceScanner = new Scanner(combined);
+        sentenceScanner.useDelimiter("[\\.!?]");
+
+        while(sentenceScanner.hasNext()){
+            senCount++;
+            sentenceScanner.next();
+        }
+
+        sentenceScanner.close();
+        
         return senCount;
     }
 

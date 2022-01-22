@@ -1,28 +1,25 @@
 package StringParser;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 
 public class StringParser {
 
-    private ArrayList<String> temp;
+    private String temp;
 
     public StringParser(String a) {
 
-        temp = new ArrayList<String>();
-        temp.add(a.toLowerCase());
+        temp = a.toLowerCase();
 
     }
 
     public StringParser(File file){
 
-        temp = new ArrayList<String>();
-
         try{
             Scanner fileScanner = new Scanner(file);
             while(fileScanner.hasNextLine()){
-                temp.add(fileScanner.nextLine());
+                temp += fileScanner.nextLine().toLowerCase();
+                temp += " ";
             }
             fileScanner.close();
         }
@@ -42,17 +39,14 @@ public class StringParser {
     public int countWords() {
 
         int wordCount = 0;
-        for(int i = 0; i < temp.size(); i++){
 
-            Scanner wordCounter = new Scanner(temp.get(i));
-            while(wordCounter.hasNext()){
-                wordCount++;
-                wordCounter.next();
-                    
-            }
-            wordCounter.close();
-
+        Scanner wordCounter = new Scanner(temp);
+        wordCounter.useDelimiter("[^a-z]+");
+        while(wordCounter.hasNext()){
+            wordCount++;
+            wordCounter.next();
         }
+        wordCounter.close();
 
         return wordCount;
 
@@ -60,15 +54,17 @@ public class StringParser {
 
     public int countVowels() {
 
-        int vowelCount = 0;
-        for(int i = 0; i < temp.size(); i++){
-            for(int j = 0; j < temp.get(i).length(); j++){
-                char letter = temp.get(i).charAt(j);
-                if(isVowel(letter)){
-                    vowelCount++;
-                }
-            }
+        int vowelCount = -1;
+        Scanner vowelCounter = new Scanner(temp);
+        vowelCounter.useDelimiter("[aeiou]");
+
+        while(vowelCounter.hasNext()){
+            vowelCount++;
+            vowelCounter.next();
         }
+
+        vowelCounter.close();
+
         return vowelCount;
 
     }
@@ -95,43 +91,41 @@ public class StringParser {
 
         int syllableCount = 0;
 
-        for(int i = 0; i < temp.size(); i++){
+        Scanner wordScanner = new Scanner(temp);
 
-            Scanner wordScanner = new Scanner(temp.get(i));
+        while(wordScanner.hasNext()){
 
-            while(wordScanner.hasNext()){
-                String word = wordScanner.next();
-                boolean withinVowelString = false;
-                int wordSyllables = 0;
+            String word = wordScanner.next();
+            boolean withinVowelString = false;
+            int wordSyllables = 0;
 
-                for(int j = 0; j < word.length(); j++){
-                    if(isVowel(word.charAt(j))){
+            for(int j = 0; j < word.length(); j++){
 
-                        if(j == word.length() - 1){
-                            break;
-                        }
+                if(isVowel(word.charAt(j))){
 
-                        if(!withinVowelString){
-                            withinVowelString = true;
-                            wordSyllables++;
-                        }
-
+                    if(j == word.length() - 1 && word.charAt(j) == 'e'){
+                        break;
                     }
-                    else{
-                        withinVowelString = false;
+                    else if(!withinVowelString){
+                        withinVowelString = true;
+                        wordSyllables++;
                     }
+
                 }
-
-                if(wordSyllables == 0){
-                    wordSyllables = 1;
+                else{
+                    withinVowelString = false;
                 }
-
-                syllableCount += wordSyllables;
-
             }
 
-            wordScanner.close();
+            if(wordSyllables == 0){
+                wordSyllables = 1;
+            }
+
+            syllableCount += wordSyllables;
+
         }
+
+        wordScanner.close();
 
         return syllableCount;
 
@@ -146,12 +140,7 @@ public class StringParser {
 
         int senCount = 0;
 
-        String combined = "";
-        for(String line : temp){
-            combined += line;
-        }
-
-        Scanner sentenceScanner = new Scanner(combined);
+        Scanner sentenceScanner = new Scanner(temp);
         sentenceScanner.useDelimiter("[\\.!?]");
 
         while(sentenceScanner.hasNext()){
@@ -164,7 +153,15 @@ public class StringParser {
         return senCount;
     }
 
+    public float readingEase(){
+        return (float)(206.835 - (1.015 * ((float)countWords() / countSentences())) - (84.6 * ((float)countSyllables() / countWords())));
+    }
+
+    public int gradeLevel(){
+        return (int)(0.39 * ((float)countWords() / countSentences()) + 11.8 * ((float)countSyllables() / countWords()) - 15.59);
+    }
+
     public String toString() {
-        return "words: " + countWords() + ", vowels: " + countVowels() + ", sentences: " + countSentences() + ", syllables: " + countSyllables();
+        return "words: " + countWords() + ", vowels: " + countVowels() + ", sentences: " + countSentences() + ", syllables: " + countSyllables() + ", reading ease: " + readingEase() + ", reading grade level: " + gradeLevel();
     }
 }
